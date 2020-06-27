@@ -11,6 +11,9 @@
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+use Illuminate\Support\Facades\Route;
+
+Route::view('/', 'home');
+Route::view('/shop', 'shop');
+Route::view('/cart', 'cart');
+Route::view('/details', 'details');
