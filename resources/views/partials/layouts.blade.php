@@ -27,7 +27,7 @@
         />
         <link
             rel="stylesheet"
-            href="../maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+            href="{{ asset('/assets/css/font-awesome.min.css')}}"
         />
 
         <!-- Styles -->

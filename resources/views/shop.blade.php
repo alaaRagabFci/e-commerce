@@ -1,7 +1,31 @@
 @extends('partials.layouts')
 @section('title', 'Shop')
 @section('content')
-@include('partials.breadcrumb')
+<div class="breadcrumbs">
+    <div class="breadcrumbs-container container">
+        <div>
+            <a href="{{ url('/') }}">Home</a>
+            <i class="fa fa-chevron-right breadcrumb-separator"></i>
+            <span>Shop</span>
+        </div>
+        <div>
+            <div class="aa-input-container" id="aa-input-container">
+                <input type="search" id="aa-search-input" class="aa-input-search" placeholder="Search with algolia..." name="search" autocomplete="off" />
+                <svg class="aa-input-icon" viewBox="654 -372 1664 1664">
+                    <path
+                        d="M1806,332c0-123.3-43.8-228.8-131.5-316.5C1586.8-72.2,1481.3-116,1358-116s-228.8,43.8-316.5,131.5  C953.8,103.2,910,208.7,910,332s43.8,228.8,131.5,316.5C1129.2,736.2,1234.7,780,1358,780s228.8-43.8,316.5-131.5  C1762.2,560.8,1806,455.3,1806,332z M2318,1164c0,34.7-12.7,64.7-38,90s-55.3,38-90,38c-36,0-66-12.7-90-38l-343-342  c-119.3,82.7-252.3,124-399,124c-95.3,0-186.5-18.5-273.5-55.5s-162-87-225-150s-113-138-150-225S654,427.3,654,332  s18.5-186.5,55.5-273.5s87-162,150-225s138-113,225-150S1262.7-372,1358-372s186.5,18.5,273.5,55.5s162,87,225,150s113,138,150,225  S2062,236.7,2062,332c0,146.7-41.3,279.7-124,399l343,343C2305.7,1098.7,2318,1128.7,2318,1164z"
+                    />
+                </svg>
+            </div>
+
+            <form action="https://laravelecommerceexample.ca/search" method="GET" class="search-form">
+                <i class="fa fa-search search-icon"></i>
+                <input type="text" name="query" id="query" value="" class="search-box" placeholder="Search for product" required />
+            </form>
+        </div>
+    </div>
+</div>
+<!-- end breadcrumbs -->
 <div class="container"></div>
 
 <div class="products-section container">
@@ -45,136 +69,25 @@
         </div>
 
         <div class="products text-center">
-            <div class="product">
-                <a href="shop/laptop-1.html"
-                    ><img
-                        src="storage/products/dummy/laptop-1.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/laptop-1.html"
-                    ><div class="product-name">Laptop 1</div></a
-                >
-                <div class="product-price">$2106.84</div>
-            </div>
-            <div class="product">
-                <a href="shop/laptop-12.html"
-                    ><img
-                        src="storage/products/dummy/laptop-12.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/laptop-12.html"
-                    ><div class="product-name">Laptop 12</div></a
-                >
-                <div class="product-price">$2345.70</div>
-            </div>
-            <div class="product">
-                <a href="shop/laptop-22.html"
-                    ><img
-                        src="storage/products/dummy/laptop-22.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/laptop-22.html"
-                    ><div class="product-name">Laptop 22</div></a
-                >
-                <div class="product-price">$2038.49</div>
-            </div>
-            <div class="product">
-                <a href="shop/desktop-1.html"
-                    ><img
-                        src="storage/products/dummy/desktop-1.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/desktop-1.html"
-                    ><div class="product-name">Desktop 1</div></a
-                >
-                <div class="product-price">$4401.87</div>
-            </div>
-            <div class="product">
-                <a href="shop/phone-2.html"
-                    ><img
-                        src="storage/products/dummy/phone-2.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/phone-2.html"
-                    ><div class="product-name">Phone 2</div></a
-                >
-                <div class="product-price">$1414.51</div>
-            </div>
-            <div class="product">
-                <a href="shop/phone-4.html"
-                    ><img
-                        src="storage/products/dummy/phone-4.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/phone-4.html"
-                    ><div class="product-name">Phone 4</div></a
-                >
-                <div class="product-price">$1235.07</div>
-            </div>
-            <div class="product">
-                <a href="shop/phone-8.html"
-                    ><img
-                        src="storage/products/dummy/phone-8.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/phone-8.html"
-                    ><div class="product-name">Phone 8</div></a
-                >
-                <div class="product-price">$844.00</div>
-            </div>
-            <div class="product">
-                <a href="shop/tablet-3.html"
-                    ><img
-                        src="storage/products/dummy/tablet-3.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/tablet-3.html"
-                    ><div class="product-name">Tablet 3</div></a
-                >
-                <div class="product-price">$1425.89</div>
-            </div>
-            <div class="product">
-                <a href="shop/tablet-5.html"
-                    ><img
-                        src="storage/products/dummy/tablet-5.jpg"
-                        alt="product"
-                /></a>
-                <a href="shop/tablet-5.html"
-                    ><div class="product-name">Tablet 5</div></a
-                >
-                <div class="product-price">$514.63</div>
-            </div>
+            @foreach ($products as $product)
+                <div class="product">
+                    <a href="{{ url('/product-details', $product->slug) }}"
+                        ><img
+                            src="{{ asset('/assets/storage/products/dummy/'.$product->slug.'.jpg')}}"
+                            alt="product"
+                    /></a>
+                    <a href="{{ url('/product-details', $product->slug) }}"
+                        ><div class="product-name">{{ $product->name }}</div></a
+                    >
+                    <div class="product-price">{{ changePriceFormat($product->price) }}</div>
+                </div>
+            @endforeach
         </div>
         <!-- end products -->
 
         <div class="spacer"></div>
         <nav>
-            <ul class="pagination">
-                <li
-                    class="page-item disabled"
-                    aria-disabled="true"
-                    aria-label="&laquo; Previous"
-                >
-                    <span class="page-link" aria-hidden="true">&lsaquo;</span>
-                </li>
-
-                <li class="page-item active" aria-current="page">
-                    <span class="page-link">1</span>
-                </li>
-                <li class="page-item">
-                    <a class="page-link" href="shop4658.html?page=2">2</a>
-                </li>
-
-                <li class="page-item">
-                    <a
-                        class="page-link"
-                        href="shop4658.html?page=2"
-                        rel="next"
-                        aria-label="Next &raquo;"
-                        >&rsaquo;</a
-                    >
-                </li>
-            </ul>
+            {{ $products->links() }}
         </nav>
     </div>
 </div>

@@ -14,7 +14,7 @@
 
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css?family=Montserrat%7CRoboto:300,400,700" rel="stylesheet" />
-    <link rel="stylesheet" href="../maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link rel="stylesheet" href="{{ asset('/assets/css/font-awesome.min.css')}}" />
 
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('/assets/css/app.css') }}" />
@@ -101,67 +101,20 @@
                     </div>
 
                     <div class="products text-center">
-                        <div class="product">
-                            <a href="shop/laptop-22.html"><img src="storage/products/dummy/laptop-22.jpg" alt="product" /></a>
-                            <a href="shop/laptop-22.html">
-                                <div class="product-name">Laptop 22</div>
-                            </a>
-                            <div class="product-price">$2038.49</div>
-                        </div>
-                        <div class="product">
-                            <a href="shop/phone-2.html"><img src="storage/products/dummy/phone-2.jpg" alt="product" /></a>
-                            <a href="shop/phone-2.html">
-                                <div class="product-name">Phone 2</div>
-                            </a>
-                            <div class="product-price">$1414.51</div>
-                        </div>
-                        <div class="product">
-                            <a href="shop/appliance-5.html"><img src="storage/products/dummy/appliance-5.jpg" alt="product" /></a>
-                            <a href="shop/appliance-5.html">
-                                <div class="product-name">Appliance 5</div>
-                            </a>
-                            <div class="product-price">$826.55</div>
-                        </div>
-                        <div class="product">
-                            <a href="shop/phone-4.html"><img src="storage/products/dummy/phone-4.jpg" alt="product" /></a>
-                            <a href="shop/phone-4.html">
-                                <div class="product-name">Phone 4</div>
-                            </a>
-                            <div class="product-price">$1235.07</div>
-                        </div>
-                        <div class="product">
-                            <a href="shop/laptop-1.html"><img src="storage/products/dummy/laptop-1.jpg" alt="product" /></a>
-                            <a href="shop/laptop-1.html">
-                                <div class="product-name">Laptop 1</div>
-                            </a>
-                            <div class="product-price">$2106.84</div>
-                        </div>
-                        <div class="product">
-                            <a href="shop/desktop-1.html"><img src="storage/products/dummy/desktop-1.jpg" alt="product" /></a>
-                            <a href="shop/desktop-1.html">
-                                <div class="product-name">Desktop 1</div>
-                            </a>
-                            <div class="product-price">$4401.87</div>
-                        </div>
-                        <div class="product">
-                            <a href="shop/tablet-3.html"><img src="storage/products/dummy/tablet-3.jpg" alt="product" /></a>
-                            <a href="shop/tablet-3.html">
-                                <div class="product-name">Tablet 3</div>
-                            </a>
-                            <div class="product-price">$1425.89</div>
-                        </div>
-                        <div class="product">
-                            <a href="shop/camera-3.html"><img src="storage/products/dummy/camera-3.jpg" alt="product" /></a>
-                            <a href="shop/camera-3.html">
-                                <div class="product-name">Camera 3</div>
-                            </a>
-                            <div class="product-price">$1834.99</div>
-                        </div>
+                        @foreach ($products as $product)
+                            <div class="product">
+                                <a href="{{ url('/product-details', $product->slug) }}"><img src="{{ asset('/assets/storage/products/dummy/'.$product->slug.'.jpg')}}" alt="product" /></a>
+                                <a href="{{ url('/product-details', $product->slug) }}">
+                                    <div class="product-name">{{ $product->name }}</div>
+                                </a>
+                                <div class="product-price">{{ changePriceFormat($product->price) }}</div>
+                            </div>
+                        @endforeach
                     </div>
                     <!-- end products -->
 
                     <div class="text-center button-container">
-                        <a href="shop.html" class="button">View more products</a
+                        <a href="{{ url('shop') }}" class="button">View more products</a
                         >
                     </div>
                 </div>
