@@ -67,8 +67,11 @@
 
         <p>&nbsp;</p>
 
-        <form action="https://laravelecommerceexample.ca/cart/76" method="POST">
-            <input type="hidden" name="_token" value="nvggLkr4XriuW6x32myBjszYdQox8Hbu2QMoh7BR">
+        <form action="{{ url('add-to-cart') }}" method="POST">
+            @csrf
+            <input type="hidden" name="id" value="{{ $product->id }}">
+            <input type="hidden" name="price" value="{{ $product->price }}">
+            <input type="hidden" name="name" value="{{ $product->name }}">
             <button type="submit" class="button button-plain">Add to Cart</button>
         </form>
     </div>

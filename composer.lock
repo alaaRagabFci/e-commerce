@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "5ac7407dc851b5e4eb9c002f1ba28c68",
+    "content-hash": "dccba62e2e1531634bbb6d3813d77b39",
     "packages": [
         {
             "name": "dnoegel/php-xdg-base-dir",
@@ -374,6 +374,7 @@
                     "email": "jakub.onderka@gmail.com"
                 }
             ],
+            "abandoned": "php-parallel-lint/php-console-color",
             "time": "2018-09-29T17:23:10+00:00"
         },
         {
@@ -420,6 +421,7 @@
                 }
             ],
             "description": "Highlight PHP code in terminal",
+            "abandoned": "php-parallel-lint/php-console-highlighter",
             "time": "2018-09-29T18:48:56+00:00"
         },
         {
@@ -993,6 +995,71 @@
                 "php"
             ],
             "time": "2019-11-08T13:50:10+00:00"
+        },
+        {
+            "name": "olimortimer/laravelshoppingcart",
+            "version": "4.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/olimortimer/LaravelShoppingcart.git",
+                "reference": "bcd52a0e60670ca64fe8af991ae2e2cd1f547dcf"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/olimortimer/LaravelShoppingcart/zipball/bcd52a0e60670ca64fe8af991ae2e2cd1f547dcf",
+                "reference": "bcd52a0e60670ca64fe8af991ae2e2cd1f547dcf",
+                "shasum": ""
+            },
+            "require": {
+                "illuminate/events": "5.*.* || 6.*.* || 7.*.*",
+                "illuminate/session": "5.*.* || 6.*.* || 7.*.*",
+                "illuminate/support": "5.*.* || 6.*.* || 7.*.*"
+            },
+            "require-dev": {
+                "mockery/mockery": "~0.9.0 || ^1.0",
+                "orchestra/testbench": "~3.1",
+                "phpunit/phpunit": "~5.0 || ~6.0 || ~7.0 || ~8.0"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Gloudemans\\Shoppingcart\\ShoppingcartServiceProvider"
+                    ],
+                    "aliases": {
+                        "Cart": "Gloudemans\\Shoppingcart\\Facades\\Cart"
+                    }
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Gloudemans\\Shoppingcart\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Rob Gloudemans",
+                    "email": "info@robgloudemans.nl"
+                },
+                {
+                    "name": "Michael V.",
+                    "email": "michael@michaelbelgium.me"
+                },
+                {
+                    "name": "Oli Mortimer",
+                    "email": "oli@olimortimer.com"
+                }
+            ],
+            "description": "Laravel Shoppingcart",
+            "keywords": [
+                "laravel",
+                "shoppingcart"
+            ],
+            "time": "2020-03-24T13:17:26+00:00"
         },
         {
             "name": "opis/closure",

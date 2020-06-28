@@ -11,10 +11,25 @@
 |
 */
 
+use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', 'HomeController@index');
+
 Route::get('/product-details/{product}', 'HomeController@getProduct');
+
 Route::get('/shop', 'HomeController@allProducts');
-Route::view('/cart', 'cart');
+
+Route::get('/cart', 'HomeController@cart');
+Route::post('/add-to-cart', 'HomeController@addToCart');
+Route::delete('/removeCartItem/{product}', 'HomeController@removeCartItem');
+Route::post('/moveToCart/{product}', 'HomeController@moveToCart');
+
+Route::post('/saveForLater/{product}', 'HomeController@saveForLater');
+Route::delete('/removeSaveForLaterItem/{product}', 'HomeController@removeSaveForLaterItem');
+Route::get('empty', function () {
+    Cart::instance('default')->destroy();
+    Cart::instance('saveForLater')->destroy();
+});
+
 Route::view('/details', 'details');

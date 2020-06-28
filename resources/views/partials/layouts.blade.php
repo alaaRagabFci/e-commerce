@@ -65,7 +65,11 @@
                     <ul>
                         <li><a href="register.html">Sign Up</a></li>
                         <li><a href="login.html">Login</a></li>
-                        <li><a href="{{ url('cart') }}">Cart </a></li>
+                        <li><a href="{{ url('cart') }}">Cart </a>
+                            @if (Cart::instance('default')->count())
+                            <span class="cart-count"><span>{{ Cart::instance('default')->count() }}</span></span>
+                        @endif
+                        </li>
                     </ul>
                 </div>
             </div>
