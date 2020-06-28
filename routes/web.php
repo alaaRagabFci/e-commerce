@@ -24,6 +24,7 @@ Route::get('/cart', 'HomeController@cart');
 Route::post('/add-to-cart', 'HomeController@addToCart');
 Route::delete('/removeCartItem/{product}', 'HomeController@removeCartItem');
 Route::post('/moveToCart/{product}', 'HomeController@moveToCart');
+Route::patch('/updateQuantity/{product}', 'HomeController@updateQuantity');
 
 Route::post('/saveForLater/{product}', 'HomeController@saveForLater');
 Route::delete('/removeSaveForLaterItem/{product}', 'HomeController@removeSaveForLaterItem');

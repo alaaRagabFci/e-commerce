@@ -82,6 +82,8 @@
 
         @include('partials.scripts')
 
+        @yield('extra-js')
+
     </body>
 
     <!-- Mirrored from laravelecommerceexample.ca/cart by HTTrack Website Copier/3.x [XR&CO'2014], Sat, 27 Jun 2020 21:16:42 GMT -->

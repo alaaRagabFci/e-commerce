@@ -1,5 +1,6 @@
 @extends('partials.layouts')
 @section('title', 'Cart')
+<meta name="csrf-token" content="{{ csrf_token() }}">
 @section('content')
 <div class="breadcrumbs">
     <div class="breadcrumbs-container container">
@@ -95,15 +96,13 @@
                         </form>
                     </div>
                     <div>
-                        <select class="quantity" data-id="027c91341fd5cf4d2579b49c4b6a90da" data-productquantity="10">
-                            <option selected="">1</option>
-                            <option>2</option>
-                            <option>3</option>
-                            <option>4</option>
-                            <option>5</option>
+                        <select class="quantity" data-id="{{ $item->rowId }}">
+                            @for ($i = 1; $i <= 5 ; $i++)
+                            <option {{ $item->qty == $i ? 'selected' : '' }}>{{ $i }}</option>
+                            @endfor
                         </select>
                     </div>
-                    <div>{{ changePriceFormat($item->model->price) }}</div>
+                    <div>{{ changePriceFormat($item->subtotal) }}</div>
                 </div>
             </div>
             <!-- end cart-table-row -->
@@ -187,4 +186,28 @@
 </div>
 <!-- end cart-section -->
 
-@include('partials.might-also-like') @endsection
+@include('partials.might-also-like')
+@endsection
+
+@section('extra-js')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document.body).on('change', '.quantity', function(e) {
+        const id = $(this).data("id");
+        $.ajax({
+                url: "{{ url('updateQuantity') }}" + "/" + id ,
+                type: "patch",
+                headers: {
+                        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                    },
+                data: {quantity: $(this).val()},
+                error: function(){
+                    window.location.reload();
+                },
+                success: function(){
+                    window.location.reload();
+                }
+        });
+    });
+</script>
+@endsection

@@ -1,5 +1,5 @@
 <script src="{{ asset('/assets/js/app.js')}}"></script>
-<script>
+{{-- <script>
     (function () {
         const classname = document.querySelectorAll(".quantity");
 
@@ -26,7 +26,7 @@
             });
         });
     })();
-</script>
+</script> --}}
 
 <!-- Include AlgoliaSearch JS Client and autocomplete.js library -->
 <script src="../cdn.jsdelivr.net/algoliasearch/3/algoliasearch.min.js"></script>
