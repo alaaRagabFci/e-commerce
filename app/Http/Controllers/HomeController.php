@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Coupon;
 use App\Product;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -58,12 +59,21 @@ class HomeController extends Controller
         ]);
     }
 
-     /////////////////////////////////// Cart
+     ///////////////////////////////////Cart
     public function cart(){
+        $tax = config('cart.tax') / 100;
+        $discount = session()->get('coupon')['discount'];
+        $newSubtotal = Cart::subtotal() - $discount;
+        $newTax =  $newSubtotal * $tax;
+        $newTotal = $newSubtotal * (1 + $tax);
         $mightAlsoLike = Product::inRandomOrder()->take(4)->get();
 
         return view('cart', [
-            'mightAlsoLike' => $mightAlsoLike
+            'mightAlsoLike' => $mightAlsoLike,
+            'newSubtotal' => $newSubtotal,
+            'newTax' => $newTax,
+            'newTotal' => $newTotal,
+            'discount' => $discount,
         ]);
     }
 
@@ -144,4 +154,23 @@ class HomeController extends Controller
         return redirect()->to('cart')->with('success_message', 'Item has been removed!');
     }
 
+    ///////////////////////////////Coupon
+    public function addCoupon(){
+        $counpon = Coupon::where('code', request()->couponCode)->first();
+
+        if(!$counpon)
+            return back()->withErrors('Invalid coupon code. Please try again.');
+
+        session()->put('coupon', [
+            'name' => $counpon->code,
+            'discount' => $counpon->discount(Cart::subtotal()),
+        ]);
+
+        return back()->with('success_message', 'Coupon has been applied!');
+    }
+
+    public function removeCoupon(){
+        session()->forget('coupon');
+        return back()->with('success_message', 'Coupon has been removed!');
+    }
 }

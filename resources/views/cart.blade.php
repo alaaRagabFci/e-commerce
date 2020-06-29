@@ -52,7 +52,8 @@
         <div class="alert alert-success">
             {{ session()->get('success_message') }}
         </div>
-        @endif @if(count($errors) > 0)
+        @endif
+        @if(count($errors) > 0)
         <div class="alert alert-danger">
             <ul>
                 @foreach ($errors->all() as $error)
@@ -108,33 +109,57 @@
             <!-- end cart-table-row -->
             @endforeach
         </div>
-        <a href="#" class="have-code">Have a Code?</a>
+        <div class="cart-totals">
+            <div class="cart-totals-left">
+                Shipping is free because we’re awesome like that. Also because that’s additional stuff I don’t feel like figuring out :).
+            </div>
 
-        <div class="have-code-container">
-            <form action="" method="POST">
-                @csrf
-                <input type="text" name="coupon_code" id="coupon_code">
-                <button type="submit" class="button button-plain">Apply</button>
-            </form>
-        </div> <!-- end have-code-container -->
-            <div class="cart-totals">
-                <div class="cart-totals-left">
-                    Shipping is free because we’re awesome like that. Also because that’s additional stuff I don’t feel like figuring out :).
+            <div class="cart-totals-right">
+                <div>
+                    Subtotal <br>
+                    @if(session()->has('coupon'))
+                        Discount({{ session()->get('coupon')['name'] }})
+                        <form action="{{ url('/removeCoupon') }}" method="POST" style="display: inline">
+                            @csrf
+                            {{ method_field('DELETE') }}
+                            <button type="submit"><i class="fa fa-window-close" aria-hidden="true"></i>
+                            </button>
+                        </form>
+                        <br>
+                        <hr>
+                        New Subtotal
+                        <br>
+                    @endif
+                    Tax ({{ config('cart.tax') }}%)<br>
+                    <span class="cart-totals-total">Total</span>
                 </div>
-
-                <div class="cart-totals-right">
-                    <div>
-                        Subtotal <br>
-                        Tax ({{ config('cart.tax') }}%)<br>
-                        <span class="cart-totals-total">Total</span>
-                    </div>
-                    <div class="cart-totals-subtotal">
-                        {{ changePriceFormat(Cart::instance('default')->subtotal()) }} <br>
-                        {{ changePriceFormat(Cart::instance('default')->tax()) }} <br>
-                        <span class="cart-totals-total">{{ changePriceFormat(Cart::instance('default')->total()) }}</span>
-                    </div>
+                <div class="cart-totals-subtotal">
+                    {{ changePriceFormat(Cart::instance('default')->subtotal()) }} <br>
+                    @if(session()->has('coupon'))
+                        -{{ changePriceFormat($discount) }}
+                        <br>
+                        <hr>
+                        {{ changePriceFormat($newSubtotal) }}
+                        <br>
+                    @endif
+                    {{ changePriceFormat($newTax) }} <br>
+                    <span class="cart-totals-total">{{ changePriceFormat($newTotal) }}</span>
                 </div>
             </div>
+        </div>
+        @if(!session()->has('coupon'))
+            <a href="#" class="have-code">Have a Code?</a>
+
+            <div class="have-code-container">
+                <form action="{{ url('/addCoupon') }}" method="POST">
+                    @csrf
+                    <input type="text" name="couponCode" id="coupon_code">
+                    <button type="submit" class="button button-plain">Apply</button>
+                </form>
+            </div> <!-- end have-code-container -->
+            <br>
+        @endif
+
 
         <div class="cart-buttons">
             <a href="{{ url('shop') }}" class="button">Continue Shopping</a>

@@ -28,6 +28,10 @@ Route::patch('/updateQuantity/{product}', 'HomeController@updateQuantity');
 
 Route::post('/saveForLater/{product}', 'HomeController@saveForLater');
 Route::delete('/removeSaveForLaterItem/{product}', 'HomeController@removeSaveForLaterItem');
+
+Route::post('/addCoupon', 'HomeController@addCoupon');
+Route::delete('/removeCoupon', 'HomeController@removeCoupon');
+
 Route::get('empty', function () {
     Cart::instance('default')->destroy();
     Cart::instance('saveForLater')->destroy();
