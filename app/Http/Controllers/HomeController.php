@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Category;
 use App\Product;
 use Illuminate\Http\Request;
 use Gloudemans\Shoppingcart\Facades\Cart;
@@ -17,7 +18,7 @@ class HomeController extends Controller
      */
     public function index()
     {
-        $products = Product::inRandomOrder()->take(8)->get();
+        $products = Product::where('featured', 1)->take(8)->inRandomOrder()->get();
 
         return view('home', [
             'products' => $products
@@ -37,10 +38,23 @@ class HomeController extends Controller
 
      /////////////////////////////////// Shop page
     public function allProducts(){
-        $products = Product::inRandomOrder()->paginate(12);
+        $sort = request()->sort ? request()->sort : 'ASC';
+        if(request()->category){
+            $products = Product::with('categories')->whereHas('categories', function($query){
+                $query->where('slug', request()->category);
+            })->orderBy('price', $sort)->paginate(12);
+            $categoryName = Category::where('slug', request()->category)->first()->name;
+        }else{
+            $products = Product::where('featured', 1)->orderBy('price', $sort)->paginate(12);
+            $categoryName = 'Featured';
+        }
+
+        $categories = Category::get();
 
         return view('shop', [
             'products' => $products,
+            'categories' => $categories,
+            'categoryName' => $categoryName,
         ]);
     }
 

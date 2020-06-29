@@ -32,44 +32,26 @@
     <div class="sidebar">
         <h3>By Category</h3>
         <ul>
-            <li class="">
-                <a href="shop8387.html?category=laptops">Laptops</a>
-            </li>
-            <li class="">
-                <a href="shop015b.html?category=desktops">Desktops</a>
-            </li>
-            <li class="">
-                <a href="shop2d05.html?category=mobile-phones">Mobile Phones</a>
-            </li>
-            <li class="">
-                <a href="shopdd66.html?category=tablets">Tablets</a>
-            </li>
-            <li class="">
-                <a href="shope10b.html?category=tvs">TVs</a>
-            </li>
-            <li class="">
-                <a href="shop8d34.html?category=digital-cameras"
-                    >Digital Cameras</a
-                >
-            </li>
-            <li class="">
-                <a href="shop9a8c.html?category=appliances">Appliances</a>
-            </li>
+            @foreach ($categories as $category)
+                <li class="{{ $category->slug == request()->category ? 'active' : '' }}">
+                    <a href="{{ url('/shop?category='.$category->slug) }}">{{ $category->name }}</a>
+                </li>
+            @endforeach
         </ul>
     </div>
     <!-- end sidebar -->
     <div>
         <div class="products-header">
-            <h1 class="stylish-heading">Featured</h1>
+            <h1 class="stylish-heading">{{ $categoryName }}</h1>
             <div>
                 <strong>Price: </strong>
-                <a href="shop6330.html?sort=low_high">Low to High</a> |
-                <a href="shop94e1.html?sort=high_low">High to Low</a>
+                <a href="{{ url('/shop?category='.request()->category.'&sort=asc') }}">Low to High</a> |
+                <a href="{{ url('/shop?category='.request()->category.'&sort=desc') }}">High to Low</a>
             </div>
         </div>
 
         <div class="products text-center">
-            @foreach ($products as $product)
+            @forelse ($products as $product)
                 <div class="product">
                     <a href="{{ url('/product-details', $product->slug) }}"
                         ><img
@@ -81,13 +63,15 @@
                     >
                     <div class="product-price">{{ changePriceFormat($product->price) }}</div>
                 </div>
-            @endforeach
+            @empty
+            <div>No items found!</div>
+            @endforelse
         </div>
         <!-- end products -->
 
         <div class="spacer"></div>
         <nav>
-            {{ $products->links() }}
+            {{ $products->appends(request()->input())->links() }}
         </nav>
     </div>
 </div>
