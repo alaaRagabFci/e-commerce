@@ -107,7 +107,8 @@
                     <div class="products text-center">
                         @foreach ($products as $product)
                             <div class="product">
-                                <a href="{{ url('/product-details', $product->slug) }}"><img src="{{ asset('/assets/storage/products/dummy/'.$product->slug.'.jpg')}}" alt="product" /></a>
+                                <a href="{{ url('/product-details', $product->slug) }}">
+                                    <img src="{{ checkFileExist($product->image) }}" alt="product" /></a>
                                 <a href="{{ url('/product-details', $product->slug) }}">
                                     <div class="product-name">{{ $product->name }}</div>
                                 </a>

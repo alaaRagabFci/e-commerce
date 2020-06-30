@@ -19,6 +19,11 @@ class HomeController extends Controller
      */
     public function index()
     {
+        // $products = Product::get();
+        // foreach($products as $product){
+        //     $product->image = 'uploads/products/'.$product->slug.'.jpg';
+        //     $product->save();
+        // }
         $products = Product::where('featured', 1)->take(8)->inRandomOrder()->get();
 
         return view('home', [
@@ -30,7 +35,7 @@ class HomeController extends Controller
     public function getProduct($slug){
         $product = Product::where('slug', $slug)->firstOrFail();
         $mightAlsoLike = Product::where('slug', '!=', $slug)->inRandomOrder()->take(4)->get();
-
+        // dd(json_decode($product->images));
         return view('product-details', [
             'product' => $product,
             'mightAlsoLike' => $mightAlsoLike

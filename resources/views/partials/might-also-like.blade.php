@@ -4,7 +4,7 @@
         <div class="might-like-grid">
             @foreach ($mightAlsoLike as $item)
             <a href="{{ url('/product-details', $item->slug) }}" class="might-like-product">
-                <img src="{{ asset('/assets/storage/products/dummy/'.$item->slug.'.jpg')}}" alt="product">
+                <img src="{{ checkFileExist($item->image) }}" alt="product">
                 <div class="might-like-product-name">{{ $item->name }}</div>
                 <div class="might-like-product-price">{{ changePriceFormat($item->price) }}</div>
             </a>

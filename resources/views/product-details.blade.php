@@ -35,23 +35,20 @@
 <div class="product-section container">
      <div>
         <div class="product-section-image">
-            <img src="{{ asset('/assets/storage/products/dummy/'.$product->slug.'.jpg')}}" alt="product" class="active" id="currentImage">
+            <img src="{{ checkFileExist($product->image) }}" alt="product" class="active" id="currentImage">
         </div>
-        {{-- <div class="product-section-images">
+        <div class="product-section-images">
             <div class="product-section-thumbnail selected">
-                <img src="../storage/products/dummy/appliance-1.jpg" alt="product">
+                <img src="{{ checkFileExist($product->image) }}" alt="product">
             </div>
-
-            <div class="product-section-thumbnail">
-                <img src="../storage/products/dummy/laptop-2.jpg" alt="product">
-            </div>
-            <div class="product-section-thumbnail">
-                <img src="../storage/products/dummy/laptop-3.jpg" alt="product">
-            </div>
-            <div class="product-section-thumbnail">
-                <img src="../storage/products/dummy/laptop-4.jpg" alt="product">
-            </div>
-        </div> --}}
+            @if($product->images)
+                @foreach (json_decode($product->images, true) as $image)
+                    <div class="product-section-thumbnail">
+                        <img src="{{ checkFileExist($image) }}" alt="product">
+                    </div>
+                @endforeach
+            @endif
+        </div>
     </div>
     <div class="product-section-information">
         <h1 class="product-section-title">{{ $product->name }}</h1>
@@ -78,4 +75,15 @@
 </div>
 <!-- end product-section -->
 @include('partials.might-also-like')
+@endsection
+@section('extra-js')
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script type="text/javascript">
+    $(document.body).on('click', '.product-section-thumbnail', function(e) {
+        $(this).addClass("selected");
+        $('.product-section-thumbnail').not(this).removeClass('selected');
+        var selectedImageSrc = $(this).children("img").attr("src");
+        $('.product-section-image').children("img").attr("src", selectedImageSrc);
+    });
+</script>
 @endsection

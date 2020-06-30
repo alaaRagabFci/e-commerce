@@ -55,7 +55,7 @@
                 <div class="product">
                     <a href="{{ url('/product-details', $product->slug) }}"
                         ><img
-                            src="{{ asset('/assets/storage/products/dummy/'.$product->slug.'.jpg')}}"
+                            src="{{ checkFileExist($product->image) }}"
                             alt="product"
                     /></a>
                     <a href="{{ url('/product-details', $product->slug) }}"
