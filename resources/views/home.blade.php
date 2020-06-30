@@ -28,27 +28,28 @@
                 <div class="top-nav-left">
                     <div class="logo">Ecommerce</div>
                     <ul>
-                        <li>
-                            <a href="{{ url('shop') }}">
-                                    Shop
-                                </a>
-                        </li>
-                        <li>
-                            <a href="#">
-                                    About
-                                </a>
-                        </li>
-                        <li>
-                            <a href="https://blog.laravelecommerceexample.ca/">
-                                    Blog
-                                </a>
-                        </li>
+                        <li><a href="{{ url('shop') }}">Shop</a></li>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog </a></li>
                     </ul>
                 </div>
                 <div class="top-nav-right">
                     <ul>
-                        <li><a href="register.html">Sign Up</a></li>
-                        <li><a href="login.html">Login</a></li>
+                        @guest
+                        <li><a href="{{ route('register') }}">Sign Up</a></li>
+                        <li><a href="{{ route('login') }}">Login</a></li>
+                        @else
+                        <li>
+                        <a class="dropdown-item" href="{{ route('logout') }}"
+                        onclick="event.preventDefault();
+                                      document.getElementById('logout-form').submit();">
+                         {{ __('Logout') }}
+                        </a>
+                        </li>
+                        <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
+                            @csrf
+                        </form>
+                        @endguest
                         <li><a href="{{ url('cart') }}">Cart </a>
                             @if (Cart::instance('default')->count())
                                 <span class="cart-count"><span>{{ Cart::instance('default')->count() }}</span></span>

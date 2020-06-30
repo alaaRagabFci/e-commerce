@@ -69,7 +69,7 @@
             <div class="cart-table-row">
                 <div class="cart-table-row-left">
                     <a href="{{ url('/product-details', $item->model->slug) }}"><img
-                            src="{{ asset('/assets/storage/products/dummy/'.$item->model->slug.'.jpg')}}" alt="item" class="cart-table-img"/></a>
+                            src="{{ checkFileExist($item->model->image) }}" alt="item" class="cart-table-img"/></a>
                     <div class="cart-item-details">
                         <div class="cart-table-item">
                             <a href="{{ url('/product-details', $item->model->slug) }}">{{ $item->model->name }}</a>

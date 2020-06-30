@@ -382,7 +382,7 @@ form button[type=submit] {
 }
 
 .form-group {
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
 }
 
 .form-group label {
