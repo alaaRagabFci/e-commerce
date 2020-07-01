@@ -62,10 +62,10 @@
             </ul>
         </div>
         @endif
-        @if (Cart::instance('default')->count())
-        <h2>{{ Cart::instance('default')->count() }} item(s) in Shopping Cart</h2>
+        @if ($cartCount)
+        <h2>{{ $cartCount }} item(s) in Shopping Cart</h2>
         <div class="cart-table">
-            @foreach (Cart::instance('default')->content() as $item)
+            @foreach ($carts as $item)
             <div class="cart-table-row">
                 <div class="cart-table-row-left">
                     <a href="{{ url('/product-details', $item->model->slug) }}"><img
@@ -178,7 +178,8 @@
             @foreach (Cart::instance('saveForLater')->content() as $item)
                 <div class="cart-table-row">
                     <div class="cart-table-row-left">
-                        <a href="{{ url('/product-details', $item->model->slug) }}"><img src="{{ asset('/assets/storage/products/dummy/'.$item->model->slug.'.jpg')}}" alt="item" class="cart-table-img"></a>
+                        <a href="{{ url('/product-details', $item->model->slug) }}">
+                            <img src="{{ checkFileExist($item->model->image) }}" alt="item" class="cart-table-img"></a>
                         <div class="cart-item-details">
                             <div class="cart-table-item"><a href="{{ url('/product-details', $item->model->slug) }}">{{ $item->model->name }}</a></div>
                             <div class="cart-table-description">{{ $item->model->details }}</div>

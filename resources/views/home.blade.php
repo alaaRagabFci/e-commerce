@@ -50,11 +50,11 @@
                             @csrf
                         </form>
                         @endguest
-                        <li><a href="{{ url('cart') }}">Cart </a>
-                            @if (Cart::instance('default')->count())
-                                <span class="cart-count"><span>{{ Cart::instance('default')->count() }}</span></span>
+                        <li><a href="{{ url('cart') }}">Cart
+                            @if ($cartCount)
+                                <span class="cart-count"><span>{{ $cartCount }}</span></span>
                             @endif
-                        </li>
+                        </a></li>
                     </ul>
                 </div>
             </div>

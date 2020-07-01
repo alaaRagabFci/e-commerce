@@ -12,33 +12,33 @@
 */
 
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 
-Route::get('/', 'HomeController@index');
+// Product
+Route::get('/', 'ProductController@index');
+Route::get('/product-details/{product}', 'ProductController@getProduct');
+Route::get('/shop', 'ProductController@allProducts');
 
-Route::get('/product-details/{product}', 'HomeController@getProduct');
+// Cart
+Route::get('/cart', 'CartController@cart');
+Route::post('/add-to-cart', 'CartController@addToCart');
+Route::delete('/removeCartItem/{product}', 'CartController@removeCartItem');
+Route::post('/moveToCart/{product}', 'CartController@moveToCart');
+Route::patch('/updateQuantity/{product}', 'CartController@updateQuantity');
 
-Route::get('/shop', 'HomeController@allProducts');
+// Save for later
+Route::post('/saveForLater/{product}', 'SaveLaterController@saveForLater');
+Route::delete('/removeSaveForLaterItem/{product}', 'SaveLaterController@removeSaveForLaterItem');
 
-Route::get('/cart', 'HomeController@cart');
-Route::post('/add-to-cart', 'HomeController@addToCart');
-Route::delete('/removeCartItem/{product}', 'HomeController@removeCartItem');
-Route::post('/moveToCart/{product}', 'HomeController@moveToCart');
-Route::patch('/updateQuantity/{product}', 'HomeController@updateQuantity');
+// Coupon
+Route::post('/addCoupon', 'CouponController@addCoupon');
+Route::delete('/removeCoupon', 'CouponController@removeCoupon');
 
-Route::post('/saveForLater/{product}', 'HomeController@saveForLater');
-Route::delete('/removeSaveForLaterItem/{product}', 'HomeController@removeSaveForLaterItem');
-
-Route::post('/addCoupon', 'HomeController@addCoupon');
-Route::delete('/removeCoupon', 'HomeController@removeCoupon');
-
+// Empty cart
 Route::get('empty', function () {
-    Cart::instance('default')->destroy();
+    Cart::instance('shopping')->destroy();
     Cart::instance('saveForLater')->destroy();
 });
 
-Route::view('/details', 'details');
-
 Auth::routes();
-
-Route::get('/home', 'HomeController@index')->name('home');

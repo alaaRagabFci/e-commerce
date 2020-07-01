@@ -77,9 +77,9 @@
                         </form>
                         @endguest
                         <li><a href="{{ url('cart') }}">Cart </a>
-                            @if (Cart::instance('default')->count())
-                            <span class="cart-count"><span>{{ Cart::instance('default')->count() }}</span></span>
-                        @endif
+                            @if (isset($cartCount) && $cartCount)
+                            <span class="cart-count"><span>{{ $cartCount }}</span></span>
+                            @endif
                         </li>
                     </ul>
                 </div>
