@@ -10,9 +10,10 @@ class CartController extends Controller
 {
     public function cart(){
         $data = $this->getCarts();
+        $savedForlaterData = $this->getSavedForlater();
         $tax = config('cart.tax') / 100;
         $discount = session()->get('coupon')['discount'];
-        $newSubtotal = Cart::subtotal() - $discount;
+        $newSubtotal = Cart::instance('default')->subtotal() - $discount;
         $newTax =  $newSubtotal * $tax;
         $newTotal = $newSubtotal * (1 + $tax);
         $mightAlsoLike = Product::inRandomOrder()->take(4)->get();
@@ -25,23 +26,25 @@ class CartController extends Controller
             'discount' => $discount,
             'carts' => $data['carts'],
             'cartCount' => $data['cartCount'],
+            'savedForLater' => $savedForlaterData['savedForLater'],
+            'saveForLaterCount' => $savedForlaterData['saveForLaterCount'],
         ]);
     }
 
     public function addToCart(){
-        $duplications = Cart::search(function ($cartItem, $rowId){
+        $duplications = Cart::instance('default')->search(function ($cartItem, $rowId){
             return $cartItem->id === request()->id;
         });
 
         if($duplications->isNotEmpty())
             return redirect()->to('cart')->with('success_message', 'Item is already at your cart!');
 
-        Cart::add(request()->id, request()->name, 1, request()->price)
+        Cart::instance('default')->add(request()->id, request()->name, 1, request()->price)
             ->associate('App\Product');
 
         if(auth()->user()){
-            Cart::restore(auth()->user()->email);
-            Cart::store(auth()->user()->email);
+            Cart::instance('default')->restore(auth()->user()->id.'_default');
+            Cart::instance('default')->store(auth()->user()->id.'_default');
         }
 
         return redirect()->to('cart')->with('success_message', 'Item was added to your cart!');
@@ -49,11 +52,11 @@ class CartController extends Controller
 
     public function removeCartItem($id){
         if(auth()->user()){
-            Cart::restore(auth()->user()->email);
-            Cart::remove($id);
-            Cart::store(auth()->user()->email);
+            Cart::instance('default')->restore(auth()->user()->id.'_default');
+            Cart::instance('default')->remove($id);
+            Cart::instance('default')->store(auth()->user()->id.'_default');
         }else{
-            Cart::remove($id);
+            Cart::instance('default')->remove($id);
         }
 
         return redirect()->to('cart')->with('success_message', 'Item has been removed!');
@@ -62,9 +65,9 @@ class CartController extends Controller
     public function moveToCart($id){
         $item = Cart::instance('saveForLater')->get($id);
         if(auth()->user()){
-            Cart::restore(auth()->user()->email);
+            Cart::instance('saveForLater')->restore(auth()->user()->id.'_default');
             Cart::instance('saveForLater')->remove($id);
-            Cart::store(auth()->user()->email);
+            Cart::instance('saveForLater')->store(auth()->user()->id.'_default');
         }else{
             Cart::instance('saveForLater')->remove($id);
         }
@@ -93,11 +96,11 @@ class CartController extends Controller
         }
 
         if(auth()->user()){
-            Cart::restore(auth()->user()->email);
-            Cart::update($id, request()->quantity);
-            Cart::store(auth()->user()->email);
+            Cart::instance('default')->restore(auth()->user()->id.'_default');
+            Cart::instance('default')->update($id, request()->quantity);
+            Cart::instance('default')->store(auth()->user()->id.'_default');
         }else{
-            Cart::update($id, request()->quantity);
+            Cart::instance('default')->update($id, request()->quantity);
         }
 
         session()->flash('success_message', 'Quantity was updated successfully!');

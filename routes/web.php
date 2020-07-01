@@ -37,6 +37,7 @@ Route::delete('/removeCoupon', 'CouponController@removeCoupon');
 
 // Empty cart
 Route::get('empty', function () {
+    Cart::destroy();
     Cart::instance('shopping')->destroy();
     Cart::instance('saveForLater')->destroy();
 });

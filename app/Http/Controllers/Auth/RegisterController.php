@@ -79,7 +79,9 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         session()->put('previousUrl', url()->previous());
-        return view('auth.register');
+        return view('auth.register',[
+            'cartCount' => $this->getCarts()['cartCount'],
+        ]);
     }
 
     public function redirectTo()

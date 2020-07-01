@@ -9,9 +9,9 @@ class SaveLaterController extends Controller
     public function saveForLater($id){
         $item = Cart::instance('default')->get($id);
         if(auth()->user()){
-            Cart::restore(auth()->user()->email);
+            Cart::instance('default')->restore(auth()->user()->id.'_default');
             Cart::instance('default')->remove($id);
-            Cart::store(auth()->user()->email);
+            Cart::instance('default')->store(auth()->user()->id.'_default');
         }else{
             Cart::instance('default')->remove($id);
         }
@@ -26,11 +26,22 @@ class SaveLaterController extends Controller
         Cart::instance('saveForLater')->add($item->id, $item->name, 1, $item->price)
             ->associate('App\Product');
 
+        if(auth()->user()){
+            Cart::instance('saveForLater')->restore(auth()->user()->id.'_saveForLater');
+            Cart::instance('saveForLater')->store(auth()->user()->id.'_saveForLater');
+        }
+
         return redirect()->to('cart')->with('success_message', 'Item was saved for later!');
     }
 
     public function removeSaveForLaterItem($id){
-        Cart::instance('saveForLater')->remove($id);
+        if(auth()->user()){
+            Cart::instance('saveForLater')->restore(auth()->user()->id.'_saveForLater');
+            Cart::instance('saveForLater')->remove($id);
+            Cart::instance('saveForLater')->store(auth()->user()->id.'_saveForLater');
+        }else{
+            Cart::instance('saveForLater')->remove($id);
+        }
 
         return redirect()->to('cart')->with('success_message', 'Item has been removed!');
     }

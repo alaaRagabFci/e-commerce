@@ -48,7 +48,9 @@ class LoginController extends Controller
     {
         session()->put('previousUrl', url()->previous());
 
-        return view('auth.login');
+        return view('auth.login',[
+            'cartCount' => $this->getCarts()['cartCount'],
+        ]);
     }
 
     public function redirectTo()

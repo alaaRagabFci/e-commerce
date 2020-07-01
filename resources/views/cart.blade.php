@@ -172,10 +172,10 @@
             <div class="spacer"></div>
         @endif
 
-         @if(Cart::instance('saveForLater')->count())
-        <h2>{{ Cart::instance('saveForLater')->count() }} item(s) Saved For Later</h2>
+         @if($saveForLaterCount)
+        <h2>{{ $saveForLaterCount }} item(s) Saved For Later</h2>
         <div class="saved-for-later cart-table">
-            @foreach (Cart::instance('saveForLater')->content() as $item)
+            @foreach ($savedForLater as $item)
                 <div class="cart-table-row">
                     <div class="cart-table-row-left">
                         <a href="{{ url('/product-details', $item->model->slug) }}">
