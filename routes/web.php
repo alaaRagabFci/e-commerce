@@ -42,4 +42,8 @@ Route::get('empty', function () {
     Cart::instance('saveForLater')->destroy();
 });
 
+Route::view('/search-algolia', 'search');
+
+Route::view('search', 'search');
+
 Auth::routes();

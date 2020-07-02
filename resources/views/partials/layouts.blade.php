@@ -31,7 +31,6 @@
         <!-- Styles -->
         <link rel="stylesheet" href="{{ asset('/assets/css/app.css')}}" />
         <link rel="stylesheet" href="{{ asset('/assets/css/responsive.css')}}" />
-        <link rel="stylesheet" href="{{ asset('/assets/css/algolia.css')}}" />
 
         @yield('styles')
     </head>
