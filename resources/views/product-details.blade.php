@@ -52,7 +52,13 @@
         <h1 class="product-section-title">{{ $product->name }}</h1>
         <div class="product-section-subtitle">{{ $product->details }}</div>
         <div>
-            <div class="badge badge-success">In Stock</div>
+            @if($product->quantity > 5)
+                <div class="badge badge-success">In Stock</div>
+            @elseif($product->quantity < 5 && $product->quantity > 0)
+                <div class="badge badge-warning">Low Stock</div>
+            @else
+                <div class="badge badge-danger">Not available</div>
+            @endif
         </div>
         <div class="product-section-price">{{ changePriceFormat($product->price) }}</div>
 
@@ -61,14 +67,15 @@
         </p>
 
         <p>&nbsp;</p>
-
-        <form action="{{ url('add-to-cart') }}" method="POST">
-            @csrf
-            <input type="hidden" name="id" value="{{ $product->id }}">
-            <input type="hidden" name="price" value="{{ $product->price }}">
-            <input type="hidden" name="name" value="{{ $product->name }}">
-            <button type="submit" class="button button-plain">Add to Cart</button>
-        </form>
+        @if($product->quantity > 0)
+            <form action="{{ url('add-to-cart') }}" method="POST">
+                @csrf
+                <input type="hidden" name="id" value="{{ $product->id }}">
+                <input type="hidden" name="price" value="{{ $product->price }}">
+                <input type="hidden" name="name" value="{{ $product->name }}">
+                <button type="submit" class="button button-plain">Add to Cart</button>
+            </form>
+        @endif
     </div>
 </div>
 <!-- end product-section -->

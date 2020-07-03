@@ -87,7 +87,7 @@
                         </form>
                     </div>
                     <div>
-                        <select class="quantity" data-id="{{ $item->rowId }}">
+                        <select class="quantity" data-id="{{ $item->rowId }}" data-quantity = "{{ $item->model->quantity }}">
                             @for ($i = 1; $i <= 5 ; $i++)
                             <option {{ $item->qty == $i ? 'selected' : '' }}>{{ $i }}</option>
                             @endfor
@@ -210,13 +210,17 @@
 <script type="text/javascript">
     $(document.body).on('change', '.quantity', function(e) {
         const id = $(this).data("id");
+        const numOfQuantity = $(this).data("quantity");
         $.ajax({
                 url: "{{ url('updateQuantity') }}" + "/" + id ,
                 type: "patch",
                 headers: {
                         'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
                     },
-                data: {quantity: $(this).val()},
+                data: {
+                    quantity: $(this).val(),
+                    productQuantity: numOfQuantity,
+                    },
                 error: function(){
                     window.location.reload();
                 },

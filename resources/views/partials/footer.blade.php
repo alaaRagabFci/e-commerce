@@ -1,8 +1,7 @@
 <footer>
     <div class="footer-content container">
         <div class="made-with">
-            Made with <i class="fa fa-heart heart"></i> by Andre
-            Madarang
+            Made with <i class="fa fa-heart heart"></i> by Alaa Ragab
         </div>
         <ul>
             <li>Follow Me:</li>
