@@ -59,7 +59,7 @@
                     <button type="submit" class="auth-button">Create Account</button>
                     <div class="already-have-container">
                         <p><strong>Already have an account?</strong></p>
-                        <a href="login.html">Login</a>
+                        <a href="{{ url('login') }}">Login</a>
                     </div>
                 </div>
 

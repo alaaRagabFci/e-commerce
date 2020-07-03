@@ -43,7 +43,9 @@ Route::get('empty', function () {
 });
 
 Route::view('/search-algolia', 'search');
+Route::get('/checkout', 'CheckoutController@index')->middleware('auth');
+Route::post('/checkout', 'CheckoutController@pay')->middleware('auth');
 
-Route::view('search', 'search');
+Route::view('confirmation', 'thankyou')->name('confirmation.index');
 
 Auth::routes();

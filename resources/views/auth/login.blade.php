@@ -6,6 +6,19 @@
 <div class="container">
 <div class="auth-pages">
     <div class="auth-left">
+        @if (session()->has('success_message'))
+        <div class="alert alert-success">
+            {{ session()->get('success_message') }}
+        </div>
+        @endif @if(count($errors) > 0)
+        <div class="alert alert-danger">
+            <ul>
+                @foreach ($errors->all() as $error)
+                <li>{{ $error }}</li>
+                @endforeach
+            </ul>
+        </div>
+        @endif
                      <h2>Returning Customer</h2>
         <div class="spacer"></div>
 
@@ -33,17 +46,10 @@
     <div class="auth-right">
         <h2>New Customer</h2>
         <div class="spacer"></div>
-        <p><strong>Save time now.</strong></p>
-        <p>You don't need an account to checkout.</p>
-        <div class="spacer"></div>
-        <a href="shop.html" class="auth-button-hollow">Continue as Guest</a>
-        <div class="spacer"></div>
-        &nbsp;
-        <div class="spacer"></div>
         <p><strong>Save time later.</strong></p>
         <p>Create an account for fast checkout and easy access to order history.</p>
         <div class="spacer"></div>
-        <a href="register.html" class="auth-button-hollow">Create Account</a>
+        <a href="{{ url('register') }}" class="auth-button-hollow">Create Account</a>
 
     </div>
 </div>

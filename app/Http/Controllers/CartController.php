@@ -11,19 +11,14 @@ class CartController extends Controller
     public function cart(){
         $data = $this->getCarts();
         $savedForlaterData = $this->getSavedForlater();
-        $tax = config('cart.tax') / 100;
-        $discount = session()->get('coupon')['discount'];
-        $newSubtotal = Cart::instance('default')->subtotal() - $discount;
-        $newTax =  $newSubtotal * $tax;
-        $newTotal = $newSubtotal * (1 + $tax);
         $mightAlsoLike = Product::inRandomOrder()->take(4)->get();
 
         return view('cart', [
             'mightAlsoLike' => $mightAlsoLike,
-            'newSubtotal' => $newSubtotal,
-            'newTax' => $newTax,
-            'newTotal' => $newTotal,
-            'discount' => $discount,
+            'newSubtotal' => getNumbers()->get('newSubtotal'),
+            'newTax' => getNumbers()->get('newTax'),
+            'newTotal' => getNumbers()->get('newTotal'),
+            'discount' => getNumbers()->get('discount'),
             'carts' => $data['carts'],
             'cartCount' => $data['cartCount'],
             'savedForLater' => $savedForlaterData['savedForLater'],

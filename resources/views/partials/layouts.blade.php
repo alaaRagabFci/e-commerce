@@ -35,11 +35,12 @@
         @yield('styles')
     </head>
 
-    <body class="">
+    <body class="@yield('body-class', '')">
         <header>
             <div class="top-nav container">
                 <div class="top-nav-left">
                     <div class="logo"><a href="{{ url('/') }}">Ecommerce</a></div>
+                    @if(!request()->is('checkout'))
                     <ul>
                         <li>
                             <a href="{{ url('shop') }}">
@@ -57,8 +58,10 @@
                             </a>
                         </li>
                     </ul>
+                    @endif
                 </div>
                 <div class="top-nav-right">
+                    @if(!request()->is('checkout'))
                     <ul>
                         @guest
                         <li><a href="{{ route('register') }}">Sign Up</a></li>
@@ -81,6 +84,7 @@
                             @endif
                         </li>
                     </ul>
+                    @endif
                 </div>
             </div>
             <!-- end top-nav -->

@@ -10,6 +10,7 @@
     "require": {
         "php": "^7.2",
         "algolia/algoliasearch-client-php": "2.2",
+        "cartalyst/stripe-laravel": "^11.0",
         "fideloper/proxy": "^4.0",
         "laravel/framework": "^6.2",
         "laravel/scout": "^8.0",
