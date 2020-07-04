@@ -6,5 +6,5 @@ use Illuminate\Database\Eloquent\Model;
 
 class ShoppingCart extends Model
 {
-    protected $table = 'shoppingCart';
+    protected $table = 'shoppingcart';
 }
