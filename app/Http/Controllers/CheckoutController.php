@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Order;
 use App\OrderProduct;
 use App\Product;
+use App\ShoppingCart;
 use Gloudemans\Shoppingcart\Facades\Cart;
 use Illuminate\Support\Facades\Validator;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
@@ -14,7 +15,13 @@ use Cartalyst\Stripe\Exception\MissingParameterException;
 class CheckoutController extends Controller
 {
     public function index(){
-        $data = $this->getCarts();
+        if(auth()->user()){
+             //Get coupon from DB if found to apply on cart && get cart && cart count
+            $shopingCart = ShoppingCart::where('identifier', auth()->user()->id.'_default')->first();
+            $data = $shopingCart ? $this->getCarts($shopingCart->coupon_id) : $this->getCarts();
+        }else{
+            $data = $this->getCarts();
+        }
 
         return view('checkout',[
             'carts' => $data['carts'],
@@ -36,7 +43,7 @@ class CheckoutController extends Controller
             'city' => 'required',
             'province' => 'required',
             'postalcode' => 'required',
-            'phone' => 'required',
+            'phone' => 'required|number',
         ]);
 
         $contents = Cart::content()->map(function ($item) {

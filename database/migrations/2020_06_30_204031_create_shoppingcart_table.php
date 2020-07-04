@@ -12,12 +12,14 @@ class CreateShoppingcartTable extends Migration
     public function up()
     {
         Schema::create(config('cart.database.table'), function (Blueprint $table) {
+            $table->bigIncrements('id');
             $table->string('identifier');
             $table->string('instance');
             $table->longText('content');
+            $table->unsignedBigInteger('coupon_id')->nullable();
+            $table->foreign('coupon_id')->references('id')->on('coupons')
+            ->onUpdate('cascade')->onDelete('set null');
             $table->nullableTimestamps();
-
-            $table->primary(['identifier', 'instance']);
         });
     }
     /**

@@ -4,18 +4,22 @@ namespace App\Http\Controllers;
 
 use App\Category;
 use App\Product;
+use App\ShoppingCart;
 use Gloudemans\Shoppingcart\Facades\Cart;
 
 class ProductController extends Controller
 {
     public function index()
     {
-        // $products = Product::get();
-        // foreach($products as $product){
-        //     $product->image = 'uploads/products/'.$product->slug.'.jpg';
-        //     $product->save();
-        // }
-        $data = $this->getCarts();
+        if(auth()->user()){
+            //Get coupon from DB if found to apply on cart && get cart && cart count
+            $shopingCart = ShoppingCart::where('identifier', auth()->user()->id.'_default')->first();
+            $data = $this->getCarts($shopingCart->coupon_id);
+        }else{
+            // Get cart && cart count
+            $data = $this->getCarts();
+        }
+
         $products = Product::where('featured', 1)->take(8)->inRandomOrder()->get();
 
         return view('home', [
@@ -25,7 +29,9 @@ class ProductController extends Controller
     }
 
     public function getProduct($slug){
+        // Get cart && cart count
         $data = $this->getCarts();
+
         $product = Product::where('slug', $slug)->firstOrFail();
         $mightAlsoLike = Product::where('slug', '!=', $slug)->inRandomOrder()->take(4)->get();
 
@@ -37,7 +43,9 @@ class ProductController extends Controller
     }
 
     public function allProducts(){
+        // Get cart && cart count
         $data = $this->getCarts();
+
         $sort = request()->sort ? request()->sort : 'ASC';
         if(request()->category){
             $products = Product::with('categories')->whereHas('categories', function($query){

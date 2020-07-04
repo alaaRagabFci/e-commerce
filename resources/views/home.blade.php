@@ -19,6 +19,41 @@
     <!-- Styles -->
     <link rel="stylesheet" href="{{ asset('/assets/css/app.css') }}" />
     <link rel="stylesheet" href="{{ asset('/assets/css/responsive.css') }}" />
+    <style>
+        .dropbtn {
+          color: white;
+          padding: 16px;
+          font-size: 16px;
+          border: none;
+        }
+
+        .dropdown {
+          position: relative;
+          display: inline-block;
+        }
+
+        .dropdown-content {
+          display: none;
+          position: absolute;
+          background-color: #555555;
+          min-width: 160px;
+          box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+          z-index: 1;
+        }
+
+        .dropdown-content a {
+          color: black;
+          padding: 12px 16px;
+          text-decoration: none;
+          display: block;
+          font-size: 12px;
+        }
+
+        .dropdown-content a:hover {background-color: ##59595;}
+
+        .dropdown:hover .dropdown-content {display: block;}
+
+        </style>
 </head>
 
 <body>
@@ -29,8 +64,11 @@
                     <div class="logo">Ecommerce</div>
                     <ul>
                         <li><a href="{{ url('shop') }}">Shop</a></li>
-                        <li><a href="#">About</a></li>
-                        <li><a href="#">Blog </a></li>
+                        <li><a href="{{ url('cart') }}">Cart
+                            @if ($cartCount)
+                                <span class="cart-count"><span>{{ $cartCount }}</span></span>
+                            @endif
+                        </a></li>
                     </ul>
                 </div>
                 <div class="top-nav-right">
@@ -39,22 +77,22 @@
                         <li><a href="{{ route('register') }}">Sign Up</a></li>
                         <li><a href="{{ route('login') }}">Login</a></li>
                         @else
-                        <li>
-                        <a class="dropdown-item" href="{{ route('logout') }}"
-                        onclick="event.preventDefault();
-                                      document.getElementById('logout-form').submit();">
-                         {{ __('Logout') }}
-                        </a>
-                        </li>
+                        <div class="dropdown">
+                            <span class="dropbtn">Welcome,  {{ auth()->user()->name }}</span>
+                            <div class="dropdown-content">
+                              <a href="{{ url('my-account',  auth()->user()->id) }}">My Account</a>
+                              <a href="{{ url('my-orders',  auth()->user()->id) }}">My Orders</a>
+                            <a href="{{ route('logout') }}"
+                                onclick="event.preventDefault();
+                                              document.getElementById('logout-form').submit();">
+                                 {{ __('Logout') }}
+                            </a>
+                            </div>
+                          </div>
                         <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
                             @csrf
                         </form>
                         @endguest
-                        <li><a href="{{ url('cart') }}">Cart
-                            @if ($cartCount)
-                                <span class="cart-count"><span>{{ $cartCount }}</span></span>
-                            @endif
-                        </a></li>
                     </ul>
                 </div>
             </div>
@@ -66,12 +104,12 @@
                         Includes multiple products, categories, a shopping cart and a checkout system with Stripe integration.
                     </p>
                     <div class="hero-buttons">
-                        <a href="https://www.youtube.com/playlist?list=PLEhEHUEU3x5oPTli631ZX9cxl6cU_sDaR" class="button button-white">Screencasts</a
-                            >
+                        {{-- <a href="{{ url('') }}" class="button button-white">Screencasts</a
+                            > --}}
                             <a
-                                href="https://github.com/drehimself/laravel-ecommerce-example"
+                                href="{{ url('shop') }}"
                                 class="button button-white"
-                                >GitHub</a
+                                >Let's start</a
                             >
                         </div>
                     </div>
@@ -133,8 +171,7 @@
             <footer>
                 <div class="footer-content container">
                     <div class="made-with">
-                        Made with <i class="fa fa-heart heart"></i> by Andre
-                        Madarang
+                        Made with <i class="fa fa-heart heart"></i> by Alaa Ragab
                     </div>
                     <ul>
                         <li>Follow Me:</li>
