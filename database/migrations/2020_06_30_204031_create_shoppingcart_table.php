@@ -13,8 +13,8 @@ class CreateShoppingcartTable extends Migration
     {
         Schema::create(config('cart.database.table'), function (Blueprint $table) {
             $table->bigIncrements('id');
-            $table->string('identifier', 500);
-            $table->string('instance', 500);
+            $table->string('identifier');
+            $table->string('instance');
             $table->longText('content');
             $table->unsignedBigInteger('coupon_id')->nullable();
             $table->foreign('coupon_id')->references('id')->on('coupons')
