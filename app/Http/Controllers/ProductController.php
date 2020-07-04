@@ -17,7 +17,7 @@ class ProductController extends Controller
         if(auth()->user()){
             //Get coupon from DB if found to apply on cart && get cart && cart count
             $shopingCart = ShoppingCart::where('identifier', auth()->user()->id.'_default')->first();
-            $data = $this->getCarts($shopingCart->coupon_id);
+            $data = $shopingCart ? $this->getCarts($shopingCart->coupon_id) : $this->getCarts();
         }else{
             // Get cart && cart count
             $data = $this->getCarts();
