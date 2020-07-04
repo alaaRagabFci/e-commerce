@@ -99,8 +99,8 @@
                         <div class="dropdown">
                             <span class="dropbtn">Welcome,  {{ auth()->user()->name }}</span>
                             <div class="dropdown-content">
-                              <a href="{{ url('my-account',  auth()->user()->id) }}">My Account</a>
-                              <a href="{{ url('my-orders',  auth()->user()->id) }}">My Orders</a>
+                              <a href="{{ url('my-account') }}">My Account</a>
+                              <a href="{{ url('my-orders') }}">My Orders</a>
                             <a href="{{ route('logout') }}"
                                 onclick="event.preventDefault();
                                               document.getElementById('logout-form').submit();">

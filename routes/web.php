@@ -48,4 +48,8 @@ Route::post('/checkout', 'CheckoutController@pay')->middleware('auth');
 
 Route::view('confirmation', 'thankyou')->name('confirmation.index');
 
+Route::view('my-account', 'my-account')->middleware('auth');
+Route::patch('/updateMyAccount', 'ProductController@updateMyAccount')->middleware('auth');
+Route::get('/my-orders', 'ProductController@myOrders')->middleware('auth');
+
 Auth::routes();

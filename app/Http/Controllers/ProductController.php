@@ -3,9 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Category;
+use App\Order;
 use App\Product;
 use App\ShoppingCart;
+use App\User;
 use Gloudemans\Shoppingcart\Facades\Cart;
+use Illuminate\Support\Facades\Hash;
 
 class ProductController extends Controller
 {
@@ -65,5 +68,34 @@ class ProductController extends Controller
             'categoryName' => $categoryName,
             'cartCount' => $data['cartCount'],
         ]);
+    }
+
+    public function updateMyAccount()
+    {
+        request()->validate([
+            'name' => 'required|string|max:255',
+            'email' => 'required|string|email|max:255|unique:users,email,'.auth()->id(),
+            'password' => 'sometimes|nullable|string|min:6|confirmed',
+        ]);
+
+        $user = User::find(auth()->user()->id);
+        $user->update([
+            'name' => request()->name,
+            'email' => request()->email,
+        ]);
+
+        if(request()->password){
+            $user->update([
+                'password' => Hash::make(request()->password),
+            ]);
+        }
+
+        return back()->with('success_message', 'Profile updated successfully!');
+    }
+
+    public function myOrders()
+    {
+        $orders = auth()->user()->orders()->with('products')->latest()->get();
+        return view('my-orders', compact('orders'));
     }
 }

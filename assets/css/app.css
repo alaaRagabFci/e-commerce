@@ -1538,7 +1538,7 @@ h1.checkout-heading {
 }
 
 .my-orders .order-product-item {
-    display: flex;
+    display: inline-block;
     margin: 32px 0;
 }
 
