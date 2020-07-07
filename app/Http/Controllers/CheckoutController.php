@@ -15,6 +15,10 @@ use Cartalyst\Stripe\Exception\MissingParameterException;
 class CheckoutController extends Controller
 {
     public function index(){
+        if (Cart::instance('default')->count() == 0) {
+            return redirect()->to('shop');
+        }
+
         if(auth()->user()){
              //Get coupon from DB if found to apply on cart && get cart && cart count
             $shopingCart = ShoppingCart::where('identifier', auth()->user()->id.'_default')->first();
@@ -23,7 +27,20 @@ class CheckoutController extends Controller
             $data = $this->getCarts();
         }
 
+        $gateway = new \Braintree\Gateway([
+            'environment' => config('services.braintree.environment'),
+            'merchantId' => config('services.braintree.merchantId'),
+            'publicKey' => config('services.braintree.publicKey'),
+            'privateKey' => config('services.braintree.privateKey')
+        ]);
+        try {
+            $paypalToken = $gateway->ClientToken()->generate();
+        } catch (\Exception $e) {
+            $paypalToken = null;
+        }
+
         return view('checkout',[
+            'paypalToken' => $paypalToken,
             'carts' => $data['carts'],
             'cartCount' => $data['cartCount'],
             'newSubtotal' => getNumbers()->get('newSubtotal'),
@@ -96,6 +113,66 @@ class CheckoutController extends Controller
                 return back()->withInput()->withErrors('Error! ' . $e->getMessage());
             }
 
+    }
+
+        /**
+     * Store a newly created resource in storage.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function paypalCheckout()
+    {
+        // Check race condition when there are less items available to purchase
+        // if ($this->productsAreNoLongerAvailable()) {
+        //     return back()->withErrors('Sorry! One of the items in your cart is no longer avialble.');
+        // }
+
+
+        $gateway = new \Braintree\Gateway([
+            'environment' => config('services.braintree.environment'),
+            'merchantId' => config('services.braintree.merchantId'),
+            'publicKey' => config('services.braintree.publicKey'),
+            'privateKey' => config('services.braintree.privateKey')
+        ]);
+        $nonce = request()->payment_method_nonce;
+
+        $result = $gateway->transaction()->saleNoValidate([
+            'amount' => round(getNumbers()->get('newTotal') / 100, 2),
+            'paymentMethodNonce' => $nonce,
+            'options' => [
+                'submitForSettlement' => true
+            ]
+        ]);
+
+
+        $transaction = $result->transaction;
+
+        if ($result->success) {
+            $order = $this->addToOrdersTablesPaypal(
+                $transaction->paypal['payerEmail'],
+                $transaction->paypal['payerFirstName'].' '.$transaction->paypal['payerLastName'],
+                null
+            );
+
+            // Mail::send(new OrderPlaced($order));
+
+            // decrease the quantities of all the products in the cart
+            $this->decreaseQuantities();
+
+            Cart::instance('default')->destroy();
+            session()->forget('coupon');
+
+            return redirect()->route('confirmation.index')->with('success_message', 'Thank you! Your payment has been successfully accepted!');
+        } else {
+            $order = $this->addToOrdersTablesPaypal(
+                $transaction->paypal['payerEmail'],
+                $transaction->paypal['payerFirstName'].' '.$transaction->paypal['payerLastName'],
+                $result->message
+            );
+
+            return back()->withErrors('An error occurred with the message: '.$result->message);
+        }
     }
 
     public function createOrder($parameters, $error)

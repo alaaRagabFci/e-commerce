@@ -52,4 +52,6 @@ Route::view('my-account', 'my-account')->middleware('auth');
 Route::patch('/updateMyAccount', 'ProductController@updateMyAccount')->middleware('auth');
 Route::get('/my-orders', 'ProductController@myOrders')->middleware('auth');
 
+Route::post('/paypal-checkout', 'CheckoutController@paypalCheckout')->name('checkout.paypal');
+
 Auth::routes();
