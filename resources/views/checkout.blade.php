@@ -101,20 +101,11 @@
                     <div class="mt-32">or</div>
                     <div class="mt-32">
                         <h2>Pay with PayPal</h2>
-
-                        <form method="post" id="paypal-payment-form" action="{{ url('paypal-checkout') }}">
-                            @csrf
-                            <section>
-                                <div class="bt-drop-in-wrapper">
-                                    <div id="bt-dropin"></div>
-                                </div>
-                            </section>
-
-                            <input id="nonce" name="payment_method_nonce" type="hidden" />
+                        <a href="{{ url('paypal-checkout') }}">
                             <button class="button-primary" type="submit"><span>Pay with PayPal</span></button>
-                        </form>
+                        </a>
                     </div>
-                            </div>
+            </div>
 
 
 
@@ -177,8 +168,6 @@
 
    @endsection
    @section('extra-js')
-   <script src="https://js.braintreegateway.com/web/dropin/1.13.0/js/dropin.min.js"></script>
-
    <script>
        (function(){
            // Create a Stripe client
@@ -256,38 +245,6 @@
              // Submit the form
              form.submit();
            }
-
-            // PayPal Stuff
-            var form = document.querySelector('#paypal-payment-form');
-            var client_token = "{{ $paypalToken }}";
-            braintree.dropin.create({
-              authorization: client_token,
-              selector: '#bt-dropin',
-              paypal: {
-                flow: 'vault'
-              }
-            }, function (createErr, instance) {
-              if (createErr) {
-                console.log('Create Error', createErr);
-                return;
-              }
-              // remove credit card option
-              var elem = document.querySelector('.braintree-option__card');
-              elem.parentNode.removeChild(elem);
-              form.addEventListener('submit', function (event) {
-                event.preventDefault();
-                instance.requestPaymentMethod(function (err, payload) {
-                  if (err) {
-                    console.log('Request Payment Method Error', err);
-                    return;
-                  }
-                  // Add the nonce to the form and submit
-                  document.querySelector('#nonce').value = payload.nonce;
-                  form.submit();
-                });
-              });
-            });
-
        })();
    </script>
 @endsection

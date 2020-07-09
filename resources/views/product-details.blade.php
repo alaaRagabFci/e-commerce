@@ -54,7 +54,7 @@
         <div>
             @if($product->quantity > 5)
                 <div class="badge badge-success">In Stock</div>
-            @elseif($product->quantity < 5 && $product->quantity > 0)
+            @elseif($product->quantity <= 5 && $product->quantity > 0)
                 <div class="badge badge-warning">Low Stock</div>
             @else
                 <div class="badge badge-danger">Not available</div>

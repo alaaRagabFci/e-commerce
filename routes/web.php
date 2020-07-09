@@ -52,6 +52,8 @@ Route::view('my-account', 'my-account')->middleware('auth');
 Route::patch('/updateMyAccount', 'ProductController@updateMyAccount')->middleware('auth');
 Route::get('/my-orders', 'ProductController@myOrders')->middleware('auth');
 
-Route::post('/paypal-checkout', 'CheckoutController@paypalCheckout')->name('checkout.paypal');
+Route::get('/paypal-checkout', 'CheckoutController@getExpressCheckout')->name('checkout.paypal');
+Route::get('/paypal/checkout-success', 'CheckoutController@getExpressCheckoutSuccess')->name('checkout.success');
+Route::get('/paypal/checkout-cancel', 'CheckoutController@getExpressCheckoutCancel')->name('checkout.cancel');
 
 Auth::routes();
