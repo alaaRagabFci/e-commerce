@@ -32,9 +32,12 @@
         <h1 class="checkout-heading stylish-heading">Checkout</h1>
         <div class="checkout-section">
             <div>
+
+                <h2 style="margin-bottom: 10px; font-weight:bold;">Pay with Stripe</h2>
+                <hr>
                 <form action="{{ url('checkout') }}" method="POST" id="payment-form">
                    @csrf
-                    <h2>Billing Details</h2>
+                    {{-- <h2>Billing Details</h2> --}}
 
                     <div class="form-group">
                         <label for="email">Email Address</label>
@@ -97,17 +100,7 @@
 
 
                 </form>
-
-                    <div class="mt-32">or</div>
-                    <div class="mt-32">
-                        <h2>Pay with PayPal</h2>
-                        <a href="{{ url('paypal-checkout') }}">
-                            <button class="button-primary" type="submit"><span>Pay with PayPal</span></button>
-                        </a>
-                    </div>
             </div>
-
-
 
             <div class="checkout-table-container">
                 <h2>Your Order</h2>
@@ -160,6 +153,10 @@
 
                     </div>
                 </div> <!-- end checkout-totals -->
+                <br/>
+                <a href="{{ url('paypal-checkout') }}">
+                    <button id="paypal-btn" style="border:none;" class="button-primary full-width" type="submit"><span>OR Pay with PayPal</span></button>
+                </a>
             </div>
 
         </div> <!-- end checkout-section -->
@@ -245,6 +242,9 @@
              // Submit the form
              form.submit();
            }
+           $('#paypal-btn').on('click', function(){
+            this.disabled = true;
+           });
        })();
    </script>
 @endsection

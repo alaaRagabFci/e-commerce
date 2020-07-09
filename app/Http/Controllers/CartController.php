@@ -68,9 +68,9 @@ class CartController extends Controller
     public function moveToCart($id){
         $item = Cart::instance('saveForLater')->get($id);
         if(auth()->user()){
-            Cart::instance('saveForLater')->restore(auth()->user()->id.'_default');
+            Cart::instance('saveForLater')->restore(auth()->user()->id.'_saveForLater');
             Cart::instance('saveForLater')->remove($id);
-            Cart::instance('saveForLater')->store(auth()->user()->id.'_default');
+            Cart::instance('saveForLater')->store(auth()->user()->id.'_saveForLater');
         }else{
             Cart::instance('saveForLater')->remove($id);
         }
