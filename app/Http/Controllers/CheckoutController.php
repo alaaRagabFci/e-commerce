@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\OrderCompletedMail;
 use App\Order;
 use App\OrderProduct;
 use App\Product;
@@ -11,6 +12,7 @@ use Illuminate\Support\Facades\Validator;
 use Cartalyst\Stripe\Laravel\Facades\Stripe;
 use Cartalyst\Stripe\Exception\CardErrorException;
 use Cartalyst\Stripe\Exception\MissingParameterException;
+use Illuminate\Support\Facades\Mail;
 use Srmklive\PayPal\Services\ExpressCheckout;
 
 class CheckoutController extends Controller
@@ -80,14 +82,15 @@ class CheckoutController extends Controller
                 $data['last4'] = $charge['source']['last4'];
                 $data['exp_month'] = $charge['source']['exp_month'];
                 $data['exp_year'] = $charge['source']['exp_year'];
-                $this->createOrder($data, null);
-
+                $order = $this->createOrder($data, null);
                 $this->decreaseQuantities();
 
                 Cart::instance('default')->restore(auth()->user()->id.'_default');
                 Cart::instance('default')->destroy();
                 Cart::instance('default')->store(auth()->user()->id.'_default');
                 session()->forget('coupon');
+
+                Mail::send(new OrderCompletedMail($order));
 
                 return redirect()->route('confirmation.index')->with('success_message', 'Thank you! Your payment has been successfully accepted!');
             } catch (CardErrorException $e) {
@@ -162,12 +165,21 @@ class CheckoutController extends Controller
                 $data['transaction_id'] = $response['CORRELATIONID'];
                 $data['captured'] = 1;
                 $data['object'] = 'charge';
-                $this->createOrderPaypal($data, null);
+
+                // Create order
+                $order = $this->createOrderPaypal($data, null);
+
+                // Decrease product quantity
                 $this->decreaseQuantities();
+
+                // Clear cart & coupon
                 Cart::instance('default')->restore(auth()->user()->id.'_default');
                 Cart::instance('default')->destroy();
                 Cart::instance('default')->store(auth()->user()->id.'_default');
                 session()->forget('coupon');
+
+                // Send mail
+                Mail::send(new OrderCompletedMail($order));
             }
             return redirect()->route('confirmation.index')->with('success_message', 'Thank you! Your payment has been successfully accepted!');
 
